@@ -1,0 +1,3 @@
+GET http://localhost:5000/get_resources
+Content-Type: application/json
+
