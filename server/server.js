@@ -21,9 +21,9 @@ mongoose
   .then(() => console.log("MongoDB connection successful"))
   .catch((err) => console.error("MongoDB connection error: ", err));
 
+const limitCount = 10;
 // get request to withdraw the data from mongodb
 server.get("/get_resources", (req, res) => {
-  const limitCount = 10;
 
   Resource.find({})
     .limit(limitCount)
@@ -35,6 +35,21 @@ server.get("/get_resources", (req, res) => {
       res.status(500).json({ error: err.message });
     });
 });
+
+// get request for the searched content
+server.post('/get_resources/', (req, res) => {
+  let query = req.body
+  Resource.find({}
+    .limit(limitCount)
+    .then((resources) => {
+      res.status(200).json(resources);
+    })
+    .catch((err) => {
+      console.log(err)
+      res.status(500).json({ error: err.message })
+    })
+
+})
 
 // post listening and giving a callback message
 server.listen(PORT, () => {
