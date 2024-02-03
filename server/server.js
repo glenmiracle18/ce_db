@@ -24,7 +24,6 @@ mongoose
 const limitCount = 10;
 // get request to withdraw the data from mongodb
 server.get("/get_resources", (req, res) => {
-
   Resource.find({})
     .limit(limitCount)
     .then((resources) => {
@@ -36,20 +35,19 @@ server.get("/get_resources", (req, res) => {
     });
 });
 
-// get request for the searched content
-server.post('/get_resources/', (req, res) => {
-  let query = req.body
-  Resource.find({}
-    .limit(limitCount)
+// post request to database to fetch the data with the search term
+server.post("/search_query", (req, res) => {
+  let { query } = req.body;
+
+  Resource.find({ publication_title: new RegExp(query, "i") })
     .then((resources) => {
       res.status(200).json(resources);
     })
     .catch((err) => {
-      console.log(err)
-      res.status(500).json({ error: err.message })
-    })
-
-})
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    });
+});
 
 // post listening and giving a callback message
 server.listen(PORT, () => {
